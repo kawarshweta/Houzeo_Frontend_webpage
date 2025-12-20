@@ -2,24 +2,6 @@
 
 A responsive real estate search page built with Vue.js 3, featuring an interactive map, property listings with image sliders, and smooth animations.
 
-## Features
-
-### Core Features
-- 🏠 **Property Listings** - Display property cards with comprehensive details
-- 🗺️ **Interactive Map** - Leaflet-powered map with property markers
-- 🔍 **Filter Bar** - Status, price, bedrooms, and property type filters
-- 📱 **Responsive Design** - Optimized for desktop and mobile (iPhone 14 Pro Max)
-- 🎨 **Modern UI/UX** - Clean, intuitive interface with smooth transitions
-
-### Performance Optimizations
-- ⚡ **Lazy Loading** - Images load as they enter the viewport
-- 🔄 **Intersection Observer** - Efficient visibility detection
-- 🚀 **Vite Build** - Fast development and optimized production builds
-
-## Project Structure
-
-
-
 ## Prerequisites
 
 - Node.js (v18.0.0 or higher recommended)
