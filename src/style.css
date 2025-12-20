@@ -756,6 +756,11 @@ body {
   animation: slideUp 0.4s ease-out backwards;
 }
 
+.property-card.card-hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
 
 .property-image-container {
   position: relative;
@@ -1014,7 +1019,9 @@ body {
 .sort-dropdown-wrapper {
   position: relative;
   display: flex;
+  align-items: center;
   gap: 4px;
+  white-space: nowrap;
 }
 .sort-section{
   gap: 4px;
@@ -1062,7 +1069,7 @@ body {
 .sort-menu {
   position: absolute;
   right: 0;
-  margin-top: 0.5rem;
+  top: calc(100% + 8px);
   width: 12rem;
   background-color: var(--color-white);
   border: 1px solid var(--color-gray-200);
@@ -1222,5 +1229,43 @@ body {
 @media (min-width: 1024px) {
   .hide-lg {
     display: flex;
+  }
+}
+
+/* ============================================
+   iPhone 14 Pro Max Responsive Design (428px)
+   ============================================ */
+@media (max-width: 428px) {
+  .property-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .property-card-item {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .map-section-desktop {
+    display: none !important;
+  }
+
+  .property-list-section {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .results-header {
+    margin-bottom: 16px;
+  }
+
+  .location-title {
+    font-size: 14px;
+  }
+
+  .results-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }

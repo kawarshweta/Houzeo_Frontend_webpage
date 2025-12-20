@@ -175,8 +175,8 @@ onBeforeUnmount(() => {
   border: none;
   cursor: pointer;
   padding: 8px;
-  height: 26px;
-  width: 26px;
+  height: 40px;
+  width: 40px;
   flex-shrink: 0;
 }
 
@@ -492,6 +492,32 @@ onBeforeUnmount(() => {
   .header-logo {
     max-width: 117.6px;
     height: 34.3px;
+  }
+}
+
+/* iPhone 14 Pro Max (428px) and smaller */
+@media (max-width: 428px) {
+  .header-wrapper {
+    padding: 0 12px;
+    gap: 10px;
+    height: 56px;
+  }
+
+  .header-logo {
+    max-width: 90px;
+    height: auto;
+    max-height: 26px;
+  }
+
+  .mobile-menu-button {
+    padding: 5px;
+    height: 22px;
+    width: 22px;
+  }
+
+  .mobile-action-button {
+    height: 22px;
+    width: 22px;
   }
 }
 

@@ -154,6 +154,11 @@ const handleFavoriteClick = (event) => {
   box-sizing: border-box;
 }
 
+.property-card.card-hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
 
 .property-image-container {
   position: relative;
@@ -327,6 +332,57 @@ const handleFavoriteClick = (event) => {
   }
   50% {
     transform: scale(1.3);
+  }
+}
+
+/* iPhone 14 Pro Max (428px) and smaller */
+@media (max-width: 428px) {
+  .property-image-container {
+    height: 180px;
+  }
+
+  .property-details {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .property-price {
+    font-size: 16px;
+  }
+
+  .property-stats {
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .stat-number {
+    font-size: 12px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .property-address {
+    font-size: 11px;
+  }
+
+  .property-mls {
+    font-size: 11px;
+  }
+
+  .days-badge-top {
+    top: 12px;
+    left: 12px;
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  .favorite-btn {
+    top: 12px;
+    right: 12px;
+    width: 22px;
+    height: 22px;
   }
 }
 </style>

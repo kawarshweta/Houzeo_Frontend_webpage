@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -11,6 +11,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const isOpen = ref(false)
+const dropdownRef = ref(null)
 
 const options = [
   'New Listing',
@@ -35,6 +36,12 @@ const closeDropdown = () => {
   isOpen.value = false
 }
 
+const handleClickOutside = (event) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+    closeDropdown()
+  }
+}
+
 const handleKeydown = (event) => {
   if (event.key === 'Escape') {
     closeDropdown()
@@ -43,13 +50,21 @@ const handleKeydown = (event) => {
     toggleDropdown()
   }
 }
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <template>
   <div 
+    ref="dropdownRef"
     class="sort-dropdown-wrapper" 
     :class="{ open: isOpen }" 
-    @mouseleave="closeDropdown"
     @keydown="handleKeydown"
   >
 
@@ -75,6 +90,8 @@ const handleKeydown = (event) => {
         v-if="isOpen"
         class="sort-menu"
         role="listbox"
+        @mouseenter.stop
+        @mouseleave.stop
       >
         <ul>
           <li
@@ -95,6 +112,14 @@ const handleKeydown = (event) => {
 </template>
 
 <style>
+.sort-dropdown-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
 .fade-in-down {
   animation: fadeInDown var(--transition-base);
 }
@@ -127,10 +152,9 @@ const handleKeydown = (event) => {
   color: inherit;
 }
 
-.sort-section:focus {
-  outline: 2px solid #0b5aa5;
-  outline-offset: 2px;
-  border-radius: 4px;
+.sort-menu {
+  top: calc(100% + 8px) !important;
+  margin-top: 0 !important;
 }
 
 .sort-menu ul {

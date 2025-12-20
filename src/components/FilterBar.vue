@@ -2,24 +2,42 @@
   <div class="filter-bar-wrapper">
     <!-- First Row: Search Bar + Filter Button (Mobile) -->
     <div class="search-row">
-      <div class="navigation">
+      <div class="navigation" @click="focusSearch">
         <div class="frame2">
-          <div class="city-neighborhood-address">{{ displayLocation }}</div>
+          <input
+            ref="searchInput"
+            v-model="searchQuery"
+            type="text"
+            class="search-input"
+            placeholder="City, neighborhood, or address"
+            @click.stop
+            @focus="isSearchFocused = true"
+            @blur="handleSearchBlur"
+            @keyup.enter="handleSearch"
+            @input="handleSearchInput"
+          />
         </div>
         <div class="frame3">
           <button
-            v-if="location"
+            v-if="searchQuery"
             type="button"
             class="basilcross-solid-icon"
-            aria-label="Clear location"
-            @click="clearLocation"
+            aria-label="Clear search"
+            @click.stop="clearSearch"
           >
             <img 
               alt="Clear" 
               src="../icons/basil_cross-solid.svg"
             />
           </button>
-          <img class="group-icon" alt="Search" src="../icons/Group-1.svg" />
+          <button
+            type="button"
+            class="search-icon-btn"
+            aria-label="Search"
+            @click.stop="handleSearch"
+          >
+            <img class="group-icon" alt="Search" src="../icons/Group-1.svg" />
+          </button>
         </div>
       </div>
       <div class="filter-button-mobile">
@@ -66,7 +84,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 
 const props = defineProps({
   location: {
@@ -75,13 +93,59 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:location'])
+const emit = defineEmits(['update:location', 'search', 'filter-change'])
 
-const displayLocation = computed(() => props.location || 'Austin, TX')
+// Search functionality
+const searchInput = ref(null)
+const searchQuery = ref(props.location || 'Austin, TX')
+const isSearchFocused = ref(false)
 
-const clearLocation = () => {
-  emit('update:location', '')
+// Sync with prop changes
+watch(() => props.location, (newValue) => {
+  if (newValue !== searchQuery.value) {
+    searchQuery.value = newValue || 'Austin, TX'
+  }
+}, { immediate: true })
+
+const focusSearch = () => {
+  if (searchInput.value) {
+    searchInput.value.focus()
+    isSearchFocused.value = true
+  }
 }
+
+const clearSearch = () => {
+  searchQuery.value = ''
+  if (searchInput.value) {
+    searchInput.value.focus()
+  }
+  emit('update:location', '')
+  emit('search', '')
+}
+
+const handleSearchBlur = () => {
+  setTimeout(() => {
+    isSearchFocused.value = false
+  }, 200)
+}
+
+const handleSearchInput = () => {
+  emit('update:location', searchQuery.value)
+}
+
+const handleSearch = () => {
+  if (searchQuery.value.trim()) {
+    emit('update:location', searchQuery.value)
+    emit('search', searchQuery.value)
+  }
+}
+
+onMounted(() => {
+  // Initialize search query from prop
+  if (props.location) {
+    searchQuery.value = props.location
+  }
+})
 </script>
 
 <style>
@@ -225,6 +289,17 @@ const clearLocation = () => {
   gap: 20px;
   flex-shrink: 1;
   margin: 0;
+  transition: border-color 0.3s ease;
+  cursor: text;
+}
+
+.navigation:hover {
+  border-color: #0a4a8a;
+}
+
+.navigation:focus-within {
+  border-color: #0a4a8a;
+  background-color: #fff;
 }
 
 .frame2 {
@@ -233,6 +308,27 @@ const clearLocation = () => {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 400;
 }
 
 .city-neighborhood-address {
@@ -243,8 +339,18 @@ const clearLocation = () => {
   box-sizing: border-box;
 }
 
+.search-icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .frame3 {
-  width: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -313,7 +419,7 @@ const clearLocation = () => {
   gap: 12px;
   color: #0b5aa5;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
   margin: 0;
@@ -322,16 +428,22 @@ const clearLocation = () => {
 
 .frame4:hover {
   background-color: #e8f0f8;
+  border-color: #0a4a8a;
 }
 
 .product {
   position: relative;
-  font-weight: 600;
   display: inline-block;
   flex-shrink: 0;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+@media (min-width: 769px) {
+  .product {
+    width: 120px;
+  }
 }
 
 .frame-icon {
@@ -358,7 +470,7 @@ const clearLocation = () => {
   padding: 14px 16px;
   gap: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
   margin: 0;
@@ -389,7 +501,7 @@ const clearLocation = () => {
   padding: 14px 16px;
   gap: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
   margin: 0;
@@ -411,7 +523,7 @@ const clearLocation = () => {
   padding: 14px 16px;
   gap: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
   margin: 0;
@@ -445,7 +557,7 @@ const clearLocation = () => {
   padding: 14px 16px;
   gap: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
   margin: 0;
@@ -558,6 +670,74 @@ const clearLocation = () => {
 
   .desktop-filters {
     display: none;
+  }
+}
+
+/* iPhone 14 Pro Max (428px) and smaller */
+@media (max-width: 428px) {
+  .filter-bar-wrapper {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .search-row {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .navigation {
+    padding: 6px 6px 6px 12px;
+    gap: 10px;
+  }
+
+  .frame3 {
+    width: auto;
+    gap: 6px;
+  }
+
+  .filter-button-mobile {
+    width: 40px;
+    height: 40px;
+  }
+
+  .filters-row {
+    gap: 8px;
+  }
+
+  .frame4 {
+    height: 40px;
+    padding: 10px 12px;
+    min-width: 85px;
+    font-size: 12px;
+  }
+
+  .frame5 {
+    height: 40px;
+    padding: 10px 12px;
+    min-width: 75px;
+    font-size: 12px;
+  }
+
+  .save-search-button {
+    height: 40px;
+    padding: 10px 14px;
+    min-width: 100px;
+  }
+
+  .city-neighborhood-address {
+    font-size: 12px;
+  }
+
+  .product,
+  .product2,
+  .save-search-text {
+    font-size: 12px;
+  }
+
+  .basilcross-solid-icon,
+  .group-icon {
+    height: 24px;
+    width: 24px;
   }
 }
 
@@ -705,9 +885,7 @@ const clearLocation = () => {
 
   .search-row {
     width: auto;
-    flex: 1 1 auto;
-    min-width: 450px;
-    order: 1;
+    min-width: 390px;
   }
 
   .navigation {
