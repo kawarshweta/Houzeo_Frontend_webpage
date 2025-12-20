@@ -537,8 +537,8 @@ onBeforeUnmount(() => {
 
   .mobile-menu-button {
     padding: 6px;
-    height: 24px;
-    width: 24px;
+    height: 34px;
+    width: 34px;
   }
 
   .mobile-action-button {
