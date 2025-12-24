@@ -94,9 +94,9 @@ const updateMarkers = () => {
               </div>
             </div>
           `,
-          iconSize: [60, 60],
-          iconAnchor: [30, 60],
-          popupAnchor: [0, -60],
+          iconSize: [60, 72],
+          iconAnchor: [30, 34],
+          popupAnchor: [0, -34],
         })
 
         const marker = L.marker([lat, lng], { icon: markerIcon })
@@ -198,40 +198,45 @@ watch(() => props.properties, () => {
 .marker-pin {
   position: relative;
   width: 60px;
-  height: 60px;
+  height: 72px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  padding-top: 0;
 }
 
 .marker-content {
   background: #ffffff;
-  border: 2px solid #3b82f6;
-  border-radius: 8px;
-  padding: 4px 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 2px solid #1a73e8;
+  border-radius: 6px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   font-weight: 600;
   font-size: 12px;
   color: #1f2937;
   white-space: nowrap;
   position: relative;
+  margin-top: 0;
+  z-index: 1;
 }
 
 .marker-content::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 8px solid #3b82f6;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #1a73e8;
+  z-index: 0;
 }
 
 .marker-price {
-  color: #3b82f6;
+  color: #1f2937;
+  font-weight: 600;
 }
 
 /* Popup styles */
@@ -264,14 +269,59 @@ watch(() => props.properties, () => {
 .leaflet-popup-content-wrapper {
   border-radius: 8px;
   padding: 0;
+  position: relative;
+  overflow: visible;
 }
 
 .leaflet-popup-content {
   margin: 12px;
+  margin-right: 32px;
   font-size: 14px;
+  padding-right: 8px;
 }
 
 .leaflet-popup-tip {
   background: white;
+}
+
+/* Close button styling - keep it inside the popup */
+.leaflet-popup-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  line-height: 24px;
+  font-size: 18px;
+  font-weight: 300;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s ease;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #1f2937;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.leaflet-popup-close-button:active {
+  color: #000;
+}
+
+/* Ensure popup container has proper positioning */
+.leaflet-popup {
+  margin-bottom: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  position: relative;
+  overflow: hidden;
 }
 </style>

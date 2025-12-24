@@ -583,7 +583,8 @@ body {
 @media (min-width: 1024px) {
   .map-section-desktop {
     display: block !important;
-    width: 708px;
+    width: 50%;
+    flex: 1;
     flex-shrink: 0;
     position: sticky;
     top: 0;
@@ -630,8 +631,9 @@ body {
 
 @media (min-width: 1024px) {
   .property-list-section {
-    width: 100%;
+    width: 50%;
     flex: 1;
+    flex-shrink: 0;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;

@@ -48,13 +48,66 @@
     
     <!-- Second Row: Filter Buttons -->
     <div class="filters-row">
-      <div class="frame4">
-        <div class="product">For Sale</div>
-        <img class="frame-icon" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+      <div class="frame4" @click.stop="toggleDropdown('forSale')" :class="{ active: activeDropdown === 'forSale' }">
+        <div class="product">{{ selectedForSale }}</div>
+        <img class="frame-icon" :class="{ rotated: activeDropdown === 'forSale' }" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+        <div v-if="activeDropdown === 'forSale'" class="dropdown-menu listing-status-dropdown" @click.stop>
+          <div class="listing-status-header">Listing Status</div>
+          <div class="listing-status-options">
+            <label 
+              class="listing-status-option"
+              :class="{ selected: selectedForSale === 'For Sale' }"
+            >
+              <span class="status-indicator status-indicator-green"></span>
+              <span class="status-label">For Sale</span>
+              <input 
+                type="radio" 
+                name="listingStatus" 
+                value="For Sale"
+                :checked="selectedForSale === 'For Sale'"
+                @change="selectForSale('For Sale')"
+                class="status-radio"
+              />
+            </label>
+            <label 
+              class="listing-status-option"
+              :class="{ selected: selectedForSale === 'Sold' }"
+            >
+              <span class="status-indicator status-indicator-yellow"></span>
+              <span class="status-label">Sold</span>
+              <input 
+                type="radio" 
+                name="listingStatus" 
+                value="Sold"
+                :checked="selectedForSale === 'Sold'"
+                @change="selectForSale('Sold')"
+                class="status-radio"
+              />
+            </label>
+          </div>
+          <div class="dropdown-footer">
+            <button class="dropdown-apply-btn" @click="applyForSale">Apply</button>
+          </div>
+        </div>
       </div>
-      <div class="frame5">
-        <div class="product2">Price</div>
-        <img class="frame-icon" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+      <div class="frame5" @click.stop="toggleDropdown('price')" :class="{ active: activeDropdown === 'price' }">
+        <div class="product2">{{ selectedPrice }}</div>
+        <img class="frame-icon" :class="{ rotated: activeDropdown === 'price' }" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+        <div v-if="activeDropdown === 'price'" class="dropdown-menu price-dropdown" @click.stop>
+          <div class="dropdown-header">Price Range</div>
+          <div 
+            v-for="option in priceOptions" 
+            :key="option.value"
+            class="dropdown-item"
+            :class="{ selected: selectedPrice === option.label }"
+            @click="selectPrice(option)"
+          >
+            {{ option.label }}
+          </div>
+          <div class="dropdown-footer">
+            <button class="dropdown-apply-btn" @click="applyPrice">Apply</button>
+          </div>
+        </div>
       </div>
       <div class="save-search-button">
         <div class="save-search-text">Save Search</div>
@@ -63,19 +116,171 @@
     
     <!-- Desktop Only Filters -->
     <div class="desktop-filters">
-      <div class="frame6">
-        <div class="product2">Beds & Baths</div>
-        <img class="frame-icon" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+      <div class="frame6" @click.stop="toggleDropdown('bedsBaths')" :class="{ active: activeDropdown === 'bedsBaths' }">
+        <div class="product2">{{ selectedBedsBaths }}</div>
+        <img class="frame-icon" :class="{ rotated: activeDropdown === 'bedsBaths' }" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+        <div v-if="activeDropdown === 'bedsBaths'" class="dropdown-menu beds-baths-dropdown" @click.stop>
+          <div class="dropdown-section">
+            <div class="dropdown-label">Bedrooms</div>
+            <div class="dropdown-options">
+              <div 
+                v-for="bed in bedOptions" 
+                :key="bed"
+                class="dropdown-item"
+                :class="{ selected: selectedBeds === bed }"
+                @click="selectBeds(bed)"
+              >
+                {{ bed === 'Any' ? 'Any' : bed + '+' }}
+              </div>
+            </div>
+          </div>
+          <div class="dropdown-section">
+            <div class="dropdown-label">Bathrooms</div>
+            <div class="dropdown-options">
+              <div 
+                v-for="bath in bathOptions" 
+                :key="bath"
+                class="dropdown-item"
+                :class="{ selected: selectedBaths === bath }"
+                @click="selectBaths(bath)"
+              >
+                {{ bath === 'Any' ? 'Any' : bath + '+' }}
+              </div>
+            </div>
+          </div>
+          <div class="dropdown-footer">
+            <button class="dropdown-apply-btn" @click="activeDropdown = null">Apply</button>
+          </div>
+        </div>
       </div>
-      <div class="frame7">
-        <div class="product2">Property Type</div>
-        <img class="frame-icon" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+      <div class="frame7" @click.stop="toggleDropdown('propertyType')" :class="{ active: activeDropdown === 'propertyType' }">
+        <div class="product2">{{ selectedPropertyType }}</div>
+        <img class="frame-icon" :class="{ rotated: activeDropdown === 'propertyType' }" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+        <div v-if="activeDropdown === 'propertyType'" class="dropdown-menu" @click.stop>
+          <div 
+            v-for="option in propertyTypeOptions" 
+            :key="option"
+            class="dropdown-item"
+            :class="{ selected: selectedPropertyType === option }"
+            @click="selectPropertyType(option)"
+          >
+            {{ option }}
+          </div>
+        </div>
       </div>
-      <div class="frame7 filter-button-desktop">
+      <div class="frame7 filter-button-desktop" @click.stop="toggleDropdown('filters')" :class="{ active: activeDropdown === 'filters' }">
         <img class="vector-icon" alt="Filter icon" src="../icons/filter.svg" />
         <div class="product2">Filters</div>
+        <img class="frame-icon" :class="{ rotated: activeDropdown === 'filters' }" alt="Dropdown indicator" src="../icons/path 3557.svg" />
+        <div v-if="activeDropdown === 'filters'" class="dropdown-menu filters-dropdown" @click.stop>
+          <div class="dropdown-header">All Filters</div>
+          
+          <!-- Listing Status Section -->
+          <div class="filter-section">
+            <div class="filter-section-label">Listing Status</div>
+            <div class="filter-section-options">
+              <label 
+                class="filter-radio-option"
+                :class="{ selected: tempForSale === 'For Sale' }"
+              >
+                <span class="status-indicator status-indicator-green"></span>
+                <span class="filter-option-label">For Sale</span>
+                <input 
+                  type="radio" 
+                  name="filterListingStatus" 
+                  value="For Sale"
+                  :checked="tempForSale === 'For Sale'"
+                  @change="selectForSaleInFilters('For Sale')"
+                  class="filter-radio"
+                />
+              </label>
+              <label 
+                class="filter-radio-option"
+                :class="{ selected: tempForSale === 'Sold' }"
+              >
+                <span class="status-indicator status-indicator-yellow"></span>
+                <span class="filter-option-label">Sold</span>
+                <input 
+                  type="radio" 
+                  name="filterListingStatus" 
+                  value="Sold"
+                  :checked="tempForSale === 'Sold'"
+                  @change="selectForSaleInFilters('Sold')"
+                  class="filter-radio"
+                />
+              </label>
+            </div>
+          </div>
+
+          <!-- Price Range Section -->
+          <div class="filter-section">
+            <div class="filter-section-label">Price Range</div>
+            <div class="filter-section-options price-options">
+              <div 
+                v-for="option in priceOptions" 
+                :key="option.value"
+                class="filter-option-item"
+                :class="{ selected: tempPrice === option.label }"
+                @click="selectPriceInFilters(option)"
+              >
+                {{ option.label }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Beds & Baths Section -->
+          <div class="filter-section">
+            <div class="filter-section-label">Bedrooms</div>
+            <div class="filter-section-options beds-baths-options">
+              <div 
+                v-for="bed in bedOptions" 
+                :key="bed"
+                class="filter-option-item"
+                :class="{ selected: tempBeds === bed }"
+                @click="selectBedsInFilters(bed)"
+              >
+                {{ bed === 'Any' ? 'Any' : bed + '+' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <div class="filter-section-label">Bathrooms</div>
+            <div class="filter-section-options beds-baths-options">
+              <div 
+                v-for="bath in bathOptions" 
+                :key="bath"
+                class="filter-option-item"
+                :class="{ selected: tempBaths === bath }"
+                @click="selectBathsInFilters(bath)"
+              >
+                {{ bath === 'Any' ? 'Any' : bath + '+' }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Property Type Section -->
+          <div class="filter-section">
+            <div class="filter-section-label">Property Type</div>
+            <div class="filter-section-options property-options">
+              <div 
+                v-for="option in propertyTypeOptions.filter(opt => opt !== 'Property Type')" 
+                :key="option"
+                class="filter-option-item"
+                :class="{ selected: tempPropertyType === option }"
+                @click="selectPropertyTypeInFilters(option)"
+              >
+                {{ option }}
+              </div>
+            </div>
+          </div>
+
+          <div class="dropdown-footer">
+            <button class="dropdown-apply-btn" @click="applyFilters">Apply</button>
+          </div>
+        </div>
       </div>
-      <div class="frame9">
+      <div class="frame9" @click="saveFilters">
         <img class="vector-icon2" alt="Saved icon" src="../icons/saved.svg" />
         <div class="city-neighborhood-address">Saved</div>
       </div>
@@ -84,7 +289,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   location: {
@@ -93,12 +298,207 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:location', 'search', 'filter-change'])
+const emit = defineEmits(['update:location', 'search', 'filter-change', 'filters-saved'])
 
 // Search functionality
 const searchInput = ref(null)
 const searchQuery = ref(props.location || 'Austin, TX')
 const isSearchFocused = ref(false)
+
+// Dropdown state
+const activeDropdown = ref(null)
+
+// Filter selections
+const selectedForSale = ref('For Sale')
+const selectedPrice = ref('Any Price')
+const selectedBedsBaths = ref('Beds & Baths')
+const selectedBeds = ref('Any')
+const selectedBaths = ref('Any')
+const selectedPropertyType = ref('Property Type')
+
+// Dropdown options
+const forSaleOptions = ['For Sale', 'Sold']
+const priceOptions = [
+  { label: 'Under $100k', value: { max: 100000 } },
+  { label: '$100k - $250k', value: { min: 100000, max: 250000 } },
+  { label: '$250k - $500k', value: { min: 250000, max: 500000 } },
+  { label: '$500k - $1M', value: { min: 500000, max: 1000000 } },
+  { label: '$1M - $2.5M', value: { min: 1000000, max: 2500000 } },
+  { label: '$2.5M+', value: { min: 2500000 } },
+  { label: 'Any Price', value: null }
+]
+
+const bedOptions = ['Any', '1', '2', '3', '4', '5', '6+']
+const bathOptions = ['Any', '1', '1.5', '2', '2.5', '3', '3.5', '4+']
+const propertyTypeOptions = ['Property Type', 'House', 'Condo', 'Townhouse', 'Multi-family', 'Land', 'Other', 'All Types']
+
+// Saved filters state
+const savedFilters = ref(null)
+
+// Temporary state for Filters dropdown (only applied on Apply click)
+const tempForSale = ref('For Sale')
+const tempPrice = ref('Any Price')
+const tempBeds = ref('Any')
+const tempBaths = ref('Any')
+const tempPropertyType = ref('Property Type')
+
+// Close dropdown when clicking outside
+const handleClickOutside = (event) => {
+  if (activeDropdown.value && !event.target.closest('.frame4, .frame5, .frame6, .frame7, .frame9')) {
+    activeDropdown.value = null
+  }
+}
+
+// Toggle dropdown
+const toggleDropdown = (dropdownName) => {
+  if (activeDropdown.value === dropdownName) {
+    activeDropdown.value = null
+  } else {
+    activeDropdown.value = dropdownName
+    // Initialize temporary state when opening Filters dropdown
+    if (dropdownName === 'filters') {
+      tempForSale.value = selectedForSale.value
+      tempPrice.value = selectedPrice.value
+      tempBeds.value = selectedBeds.value
+      tempBaths.value = selectedBaths.value
+      tempPropertyType.value = selectedPropertyType.value
+    }
+  }
+}
+
+// Selection handlers
+const selectForSale = (option) => {
+  selectedForSale.value = option
+  // Don't close dropdown immediately - wait for Apply button
+}
+
+const applyForSale = () => {
+  activeDropdown.value = null
+  emitFilterChange()
+}
+
+const selectPrice = (option) => {
+  selectedPrice.value = option.label
+  // Don't close dropdown immediately - wait for Apply button
+}
+
+// Temporary selection handlers for Filters dropdown
+const selectForSaleInFilters = (option) => {
+  tempForSale.value = option
+}
+
+const selectPriceInFilters = (option) => {
+  tempPrice.value = option.label
+}
+
+const selectBedsInFilters = (bed) => {
+  tempBeds.value = bed
+}
+
+const selectBathsInFilters = (bath) => {
+  tempBaths.value = bath
+}
+
+const selectPropertyTypeInFilters = (option) => {
+  tempPropertyType.value = option
+}
+
+const applyPrice = () => {
+  activeDropdown.value = null
+  emitFilterChange()
+}
+
+const applyFilters = () => {
+  // Apply temporary values to actual state
+  selectedForSale.value = tempForSale.value
+  selectedPrice.value = tempPrice.value
+  selectedBeds.value = tempBeds.value
+  selectedBaths.value = tempBaths.value
+  selectedPropertyType.value = tempPropertyType.value
+  
+  activeDropdown.value = null
+  updateBedsBathsLabel()
+  emitFilterChange()
+}
+
+const saveFilters = () => {
+  const filtersToSave = {
+    forSale: selectedForSale.value,
+    price: selectedPrice.value,
+    priceValue: priceOptions.find(opt => opt.label === selectedPrice.value)?.value || null,
+    beds: selectedBeds.value,
+    bedsValue: selectedBeds.value === 'Any' ? null : parseInt(selectedBeds.value),
+    baths: selectedBaths.value,
+    bathsValue: selectedBaths.value === 'Any' ? null : parseFloat(selectedBaths.value),
+    propertyType: selectedPropertyType.value,
+    propertyTypeValue: selectedPropertyType.value === 'Property Type' || selectedPropertyType.value === 'All Types' 
+      ? null 
+      : selectedPropertyType.value,
+    location: searchQuery.value,
+    timestamp: new Date().toISOString()
+  }
+  
+  savedFilters.value = filtersToSave
+  
+  // Save to localStorage
+  try {
+    localStorage.setItem('savedFilters', JSON.stringify(filtersToSave))
+    console.log('Filters saved successfully:', filtersToSave)
+    
+    // Show a brief visual feedback (optional - you can enhance this with a toast notification)
+    alert('Filters saved successfully!')
+  } catch (error) {
+    console.error('Error saving filters:', error)
+    alert('Error saving filters. Please try again.')
+  }
+  
+  // Emit saved filters event
+  emit('filters-saved', filtersToSave)
+}
+
+const selectBeds = (bed) => {
+  selectedBeds.value = bed
+  updateBedsBathsLabel()
+  emitFilterChange()
+}
+
+const selectBaths = (bath) => {
+  selectedBaths.value = bath
+  updateBedsBathsLabel()
+  emitFilterChange()
+}
+
+const selectPropertyType = (option) => {
+  selectedPropertyType.value = option
+  // Don't close dropdown or emit if we're in the Filters dropdown - wait for Apply button
+  if (activeDropdown.value !== 'filters') {
+    activeDropdown.value = null
+    emitFilterChange()
+  }
+}
+
+const updateBedsBathsLabel = () => {
+  const bedText = selectedBeds.value === 'Any' ? 'Any' : selectedBeds.value + '+'
+  const bathText = selectedBaths.value === 'Any' ? 'Any' : selectedBaths.value + '+'
+  
+  if (selectedBeds.value === 'Any' && selectedBaths.value === 'Any') {
+    selectedBedsBaths.value = 'Beds & Baths'
+  } else {
+    selectedBedsBaths.value = `${bedText} bed, ${bathText} bath`
+  }
+}
+
+const emitFilterChange = () => {
+  emit('filter-change', {
+    forSale: selectedForSale.value,
+    price: priceOptions.find(opt => opt.label === selectedPrice.value)?.value || null,
+    beds: selectedBeds.value === 'Any' ? null : parseInt(selectedBeds.value),
+    baths: selectedBaths.value === 'Any' ? null : parseFloat(selectedBaths.value),
+    propertyType: selectedPropertyType.value === 'Property Type' || selectedPropertyType.value === 'All Types' 
+      ? null 
+      : selectedPropertyType.value
+  })
+}
 
 // Sync with prop changes
 watch(() => props.location, (newValue) => {
@@ -145,6 +545,23 @@ onMounted(() => {
   if (props.location) {
     searchQuery.value = props.location
   }
+  
+  // Load saved filters from localStorage
+  try {
+    const saved = localStorage.getItem('savedFilters')
+    if (saved) {
+      savedFilters.value = JSON.parse(saved)
+    }
+  } catch (error) {
+    console.error('Error loading saved filters:', error)
+  }
+  
+  // Add click outside listener
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
@@ -168,9 +585,12 @@ onMounted(() => {
   margin: 0;
   border: none;
   line-height: 1;
-  overflow: hidden;
+  overflow: visible;
   height: fit-content;
   min-height: fit-content;
+  z-index: 200;
+  position: relative;
+  isolation: isolate;
 }
 
 .search-row {
@@ -431,6 +851,11 @@ onMounted(() => {
   border-color: #0a4a8a;
 }
 
+.frame4.active {
+  background-color: #e8f0f8;
+  border-color: #0a4a8a;
+}
+
 .product {
   position: relative;
   display: inline-block;
@@ -441,20 +866,25 @@ onMounted(() => {
 }
 
 @media (min-width: 769px) {
-  .product {
-    width: 120px;
+  .frame4 .product {
+    width: 100px;
   }
 }
 
 .frame-icon {
   width: 11px;
-    height: 5px;
+  height: 5px;
   position: relative;
   flex-shrink: 0;
   margin: 0;
   padding: 0;
   display: block;
   box-sizing: border-box;
+  transition: transform 0.2s ease;
+}
+
+.frame-icon.rotated {
+  transform: rotate(180deg);
 }
 
 .frame5 {
@@ -481,11 +911,21 @@ onMounted(() => {
   background-color: #f3f7fa;
 }
 
+.frame5.active {
+  border-color: #0b5aa5;
+  background-color: #f3f7fa;
+}
+
 .product2 {
   position: relative;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
 }
 
 .frame6 {
@@ -512,6 +952,11 @@ onMounted(() => {
   background-color: #f3f7fa;
 }
 
+.frame6.active {
+  border-color: #0b5aa5;
+  background-color: #f3f7fa;
+}
+
 .frame7 {
   height: 48px;
   border-radius: 8px;
@@ -527,9 +972,21 @@ onMounted(() => {
   white-space: nowrap;
   flex-shrink: 0;
   margin: 0;
+  min-width: 140px;
+  width: auto;
+}
+
+.frame7.filter-button-desktop {
+  justify-content: space-between;
+  min-width: auto;
 }
 
 .frame7:hover {
+  border-color: #0b5aa5;
+  background-color: #f3f7fa;
+}
+
+.frame7.active {
   border-color: #0b5aa5;
   background-color: #f3f7fa;
 }
@@ -561,6 +1018,11 @@ onMounted(() => {
   white-space: nowrap;
   flex-shrink: 0;
   margin: 0;
+}
+
+.frame9:hover {
+  border-color: #0b5aa5;
+  background-color: #f3f7fa;
 }
 
 .frame9:hover {
@@ -653,12 +1115,14 @@ onMounted(() => {
     width: auto;
     flex: 0 0 auto;
     min-width: 100px;
+    gap: 8px;
   }
 
   .frame5 {
     width: auto;
     flex: 0 0 auto;
     min-width: 100px;
+    gap: 8px;
   }
 
   .save-search-button {
@@ -863,6 +1327,357 @@ onMounted(() => {
     width: 24px;
   }
 }
+
+/* Dropdown Menu Styles */
+.frame4,
+.frame5,
+.frame6,
+.frame7 {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  min-width: 240px;
+  max-width: 320px;
+  z-index: 10000;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 0;
+  font-family: inherit;
+}
+
+.dropdown-item {
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  font-size: 14px;
+  color: #202124;
+  white-space: nowrap;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-item.selected {
+  background-color: #e8f0f8;
+  color: #1a73e8;
+  font-weight: 500;
+}
+
+.dropdown-section {
+  padding: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dropdown-section:last-child {
+  border-bottom: none;
+}
+
+.dropdown-label {
+  padding: 12px 6px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #5f6368;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.dropdown-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 6px 12px;
+}
+
+.dropdown-options .dropdown-item {
+  padding: 8px 16px;
+  border-radius: 4px;
+  min-width: 50px;
+  text-align: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+
+.dropdown-options .dropdown-item:hover {
+  background-color: #f1f3f4;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-options .dropdown-item.selected {
+  background-color: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
+  font-weight: 500;
+}
+
+.dropdown-header {
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #202124;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+}
+
+.dropdown-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dropdown-apply-btn {
+  width: 100%;
+    padding: 12px 24px;
+    background: linear-gradient(90deg, #2876C1 0%, #0E5293 100%);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+.dropdown-apply-btn:hover {
+      opacity: 0.9;
+}
+
+.price-dropdown,
+.beds-baths-dropdown,
+.filters-dropdown {
+  min-width: 280px;
+  border-radius: 8px;
+}
+
+.filters-dropdown {
+  min-width: 320px;
+  max-width: 400px;
+  right: 0;
+  left: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Filters Dropdown Styles */
+.filter-section {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-section:last-of-type {
+  border-bottom: none;
+}
+
+.filter-section-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #202124;
+  margin-bottom: 12px;
+}
+
+.filter-section-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  width: 100%;
+}
+
+.filter-section-options.price-options,
+.filter-section-options.property-options {
+  flex-direction: column;
+}
+
+.filter-section-options.beds-baths-options {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+}
+
+.filter-radio-option {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  gap: 12px;
+  border-radius: 6px;
+}
+
+.filter-radio-option:hover {
+  background-color: #f8f9fa;
+}
+
+.filter-radio-option.selected {
+  background-color: #f0f7ff;
+}
+
+.filter-option-label {
+  flex: 1;
+  font-size: 14px;
+  color: #202124;
+  font-weight: 400;
+}
+
+.filter-radio {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #1a73e8;
+  flex-shrink: 0;
+}
+
+.filter-option-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 14px;
+  color: #202124;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  background-color: #fff;
+  text-align: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-section-options.price-options .filter-option-item,
+.filter-section-options.property-options .filter-option-item {
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.filter-section-options.beds-baths-options .filter-option-item {
+  min-width: 50px;
+  text-align: center;
+}
+
+.filter-option-item:hover {
+  background-color: #f1f3f4;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.filter-option-item.selected {
+  background-color: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
+  font-weight: 500;
+}
+
+/* Listing Status Dropdown Styles */
+.listing-status-dropdown {
+  min-width: 280px;
+  border-radius: 8px;
+  padding: 0;
+}
+
+.listing-status-header {
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #202124;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+}
+
+.listing-status-options {
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.listing-status-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  gap: 12px;
+  position: relative;
+}
+
+.listing-status-option:hover {
+  background-color: #f8f9fa;
+}
+
+.listing-status-option.selected {
+  background-color: #f0f7ff;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-indicator-green {
+  background-color: #10b981;
+}
+
+.status-indicator-yellow {
+  background-color: #f59e0b;
+}
+
+.status-label {
+  flex: 1;
+  font-size: 14px;
+  color: #202124;
+  font-weight: 400;
+}
+
+.status-radio {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #1a73e8;
+  flex-shrink: 0;
+}
+
+.listing-status-dropdown .dropdown-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+}
+
 
 /* Desktop: Show all filters */
 @media (min-width: 769px) {

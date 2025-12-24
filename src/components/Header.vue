@@ -35,29 +35,98 @@
     <!-- Desktop Navigation -->
     <div class="desktop-navigation">
       <div class="group2">
-          <div class="group5">
-          <div class="product">Product</div>
-          <img class="path-3557-icon" alt="Dropdown indicator" :src="Path3557Icon" />
+        <!-- Product Dropdown -->
+        <div class="dropdown-container">
+          <div class="group5" @click.stop="toggleDropdown('product')">
+            <div class="product">Product</div>
+            <img 
+              class="path-3557-icon" 
+              alt="Dropdown indicator" 
+              :src="Path3557Icon"
+              :class="{ 'rotated': openDropdown === 'product' }"
+            />
+          </div>
+          <div v-if="openDropdown === 'product'" class="dropdown-menu product-dropdown">
+            <a href="#" class="dropdown-item-link">Flat Fee MLS</a>
+            <a href="#" class="dropdown-item-link">Full Service</a>
+            <a href="#" class="dropdown-item-link">For Sale By Owner</a>
+            <a href="#" class="dropdown-item-link">Compare Plans</a>
+          </div>
         </div>
+
         <div class="how-houzeo-works">How Houzeo Works</div>
         <div class="reviews">Reviews</div>
-                <div class="group4">
-          <div class="buy">Buy</div>
-          <img class="path-3451-icon" alt="Dropdown indicator" :src="Path3451Icon" />
+
+        <!-- Buy Dropdown -->
+        <div class="dropdown-container">
+          <div class="group4" @click.stop="toggleDropdown('buy')">
+            <div class="buy">Buy</div>
+            <img 
+              class="path-3451-icon" 
+              alt="Dropdown indicator" 
+              :src="Path3451Icon"
+              :class="{ 'rotated': openDropdown === 'buy' }"
+            />
+          </div>
+          <div v-if="openDropdown === 'buy'" class="dropdown-menu buy-dropdown">
+            <a href="#" class="dropdown-item-link">Search Homes</a>
+            <a href="#" class="dropdown-item-link">Buyer's Guide</a>
+            <a href="#" class="dropdown-item-link">Mortgage Calculator</a>
+            <a href="#" class="dropdown-item-link">Find Agents</a>
+          </div>
         </div>
-        <div class="group3">
-          <div class="sell">Sell</div>
-          <img class="path-3450-icon" alt="Dropdown indicator" :src="Path3450Icon" />
+
+        <!-- Sell Dropdown -->
+        <div class="dropdown-container">
+          <div class="group3" @click.stop="toggleDropdown('sell')">
+            <div class="sell">Sell</div>
+            <img 
+              class="path-3450-icon" 
+              alt="Dropdown indicator" 
+              :src="Path3450Icon"
+              :class="{ 'rotated': openDropdown === 'sell' }"
+            />
+          </div>
+          <div v-if="openDropdown === 'sell'" class="dropdown-menu sell-dropdown">
+            <a href="#" class="dropdown-item-link">Sell Your Home</a>
+            <a href="#" class="dropdown-item-link">Home Valuation</a>
+            <a href="#" class="dropdown-item-link">Seller's Guide</a>
+            <a href="#" class="dropdown-item-link">Pricing Plans</a>
+          </div>
         </div>
+
         <div class="pricing">Pricing</div>
-        <div class="group6">
-          <div class="resources">Resources</div>
-          <img class="path-3452-icon" alt="Dropdown indicator" :src="Path3452Icon" />
+
+        <!-- Resources Dropdown -->
+        <div class="dropdown-container">
+          <div class="group6" @click.stop="toggleDropdown('resources')">
+            <div class="resources">Resources</div>
+            <img 
+              class="path-3452-icon" 
+              alt="Dropdown indicator" 
+              :src="Path3452Icon"
+              :class="{ 'rotated': openDropdown === 'resources' }"
+            />
+          </div>
+          <div v-if="openDropdown === 'resources'" class="dropdown-menu resources-dropdown dropdown-right">
+            <a href="#" class="dropdown-item-link">Blog</a>
+            <a href="#" class="dropdown-item-link">Guides</a>
+            <a href="#" class="dropdown-item-link">FAQ</a>
+            <a href="#" class="dropdown-item-link">Support</a>
+          </div>
         </div>
+
         <div class="sign-in">Sign In</div>
               <div class="am-to-6pm-cst-mon-sat">
-        <div class="div">(844) 448-0110</div>
-        <div class="am-to-6pm">(9am to 6pm CST, Mon-Sat)</div>
+        <div class="phone-full">
+          <div class="div">(844) 448-0110</div>
+          <div class="am-to-6pm">(9am to 6pm CST, Mon-Sat)</div>
+        </div>
+        <a href="tel:+18444480110" class="phone-compact" aria-label="Call (844) 448-0110">
+          <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+        </a>
       </div>
             <div class="group">
         <div class="start-free-listing">Start Free Listing</div>
@@ -90,22 +159,83 @@
     >
       <div class="mobile-menu-content">
         <div class="mobile-menu-item" @click="closeMobileMenu">How Houzeo Works</div>
-        <div class="mobile-menu-item dropdown-item" @click="closeMobileMenu">
-          <span>Product</span>
-          <img class="dropdown-icon" alt="Dropdown indicator" :src="Path3557Icon" />
+        
+        <!-- Product Mobile Dropdown -->
+        <div class="mobile-dropdown-container">
+          <div class="mobile-menu-item dropdown-item" @click.stop="toggleMobileDropdown('product')">
+            <span>Product</span>
+            <img 
+              class="dropdown-icon" 
+              alt="Dropdown indicator" 
+              :src="Path3557Icon"
+              :class="{ 'rotated': openMobileDropdown === 'product' }"
+            />
+          </div>
+          <div v-if="openMobileDropdown === 'product'" class="mobile-dropdown-menu">
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Flat Fee MLS</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Full Service</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">For Sale By Owner</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Compare Plans</a>
+          </div>
         </div>
-        <div class="mobile-menu-item dropdown-item" @click="closeMobileMenu">
-          <span>Resources</span>
-          <img class="dropdown-icon" alt="Dropdown indicator" :src="Path3452Icon" />
+
+        <!-- Buy Mobile Dropdown -->
+        <div class="mobile-dropdown-container">
+          <div class="mobile-menu-item dropdown-item" @click.stop="toggleMobileDropdown('buy')">
+            <span>Buy</span>
+            <img 
+              class="dropdown-icon" 
+              alt="Dropdown indicator" 
+              :src="Path3451Icon"
+              :class="{ 'rotated': openMobileDropdown === 'buy' }"
+            />
+          </div>
+          <div v-if="openMobileDropdown === 'buy'" class="mobile-dropdown-menu">
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Search Homes</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Buyer's Guide</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Mortgage Calculator</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Find Agents</a>
+          </div>
         </div>
-        <div class="mobile-menu-item dropdown-item" @click="closeMobileMenu">
-          <span>Buy</span>
-          <img class="dropdown-icon" alt="Dropdown indicator" :src="Path3451Icon" />
+
+        <!-- Sell Mobile Dropdown -->
+        <div class="mobile-dropdown-container">
+          <div class="mobile-menu-item dropdown-item" @click.stop="toggleMobileDropdown('sell')">
+            <span>Sell</span>
+            <img 
+              class="dropdown-icon" 
+              alt="Dropdown indicator" 
+              :src="Path3450Icon"
+              :class="{ 'rotated': openMobileDropdown === 'sell' }"
+            />
+          </div>
+          <div v-if="openMobileDropdown === 'sell'" class="mobile-dropdown-menu">
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Sell Your Home</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Home Valuation</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Seller's Guide</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Pricing Plans</a>
+          </div>
         </div>
-        <div class="mobile-menu-item dropdown-item" @click="closeMobileMenu">
-          <span>Sell</span>
-          <img class="dropdown-icon" alt="Dropdown indicator" :src="Path3450Icon" />
+
+        <!-- Resources Mobile Dropdown -->
+        <div class="mobile-dropdown-container">
+          <div class="mobile-menu-item dropdown-item" @click.stop="toggleMobileDropdown('resources')">
+            <span>Resources</span>
+            <img 
+              class="dropdown-icon" 
+              alt="Dropdown indicator" 
+              :src="Path3452Icon"
+              :class="{ 'rotated': openMobileDropdown === 'resources' }"
+            />
+          </div>
+          <div v-if="openMobileDropdown === 'resources'" class="mobile-dropdown-menu">
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Blog</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Guides</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">FAQ</a>
+            <a href="#" class="mobile-dropdown-item" @click="closeMobileMenu">Support</a>
+          </div>
         </div>
+
         <div class="mobile-menu-item" @click="closeMobileMenu">Reviews</div>
         <div class="mobile-menu-item" @click="closeMobileMenu">Pricing</div>
         <div class="mobile-menu-item" @click="closeMobileMenu">Sign In</div>
@@ -122,7 +252,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount, onMounted } from 'vue'
 import GroupIcon from '../icons/Group.svg'
 import Path3450Icon from '../icons/Path 3450.svg'
 import Path3451Icon from '../icons/Path 3451.svg'
@@ -130,6 +260,8 @@ import Path3557Icon from '../icons/Path 3557.svg'
 import Path3452Icon from '../icons/Path 3452.svg'
 
 const isMobileMenuOpen = ref(false)
+const openDropdown = ref(null)
+const openMobileDropdown = ref(null)
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -137,16 +269,49 @@ const toggleMobileMenu = () => {
     document.body.style.overflow = 'hidden'
   } else {
     document.body.style.overflow = ''
+    openMobileDropdown.value = null
   }
 }
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
   document.body.style.overflow = ''
+  openMobileDropdown.value = null
 }
+
+const toggleDropdown = (dropdownName) => {
+  if (openDropdown.value === dropdownName) {
+    openDropdown.value = null
+  } else {
+    openDropdown.value = dropdownName
+  }
+}
+
+const closeDropdown = () => {
+  openDropdown.value = null
+}
+
+const toggleMobileDropdown = (dropdownName) => {
+  if (openMobileDropdown.value === dropdownName) {
+    openMobileDropdown.value = null
+  } else {
+    openMobileDropdown.value = dropdownName
+  }
+}
+
+const handleClickOutside = (event) => {
+  if (!event.target.closest('.dropdown-container')) {
+    closeDropdown()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
 
 onBeforeUnmount(() => {
   document.body.style.overflow = ''
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
@@ -257,6 +422,63 @@ onBeforeUnmount(() => {
   width: 11px;
   height: 5px;
   object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Container */
+.dropdown-container {
+  position: relative;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  padding: 8px 0;
+  z-index: 1001;
+  animation: slideDown 0.3s ease;
+}
+
+.dropdown-right {
+  left: auto;
+  right: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item-link {
+  display: block;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #000;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.dropdown-item-link:hover {
+  background-color: #f5f5f5;
+  color: #0B5AA5;
 }
 
 /* Desktop Actions */
@@ -271,6 +493,32 @@ onBeforeUnmount(() => {
   flex-direction: column;
   gap: 2px;
   margin-left: 6px;
+}
+
+.phone-full {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.phone-compact {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.phone-compact:hover {
+  opacity: 0.7;
+}
+
+.phone-icon {
+  width: 18px;
+  height: 18px;
+  color: #000;
+  flex-shrink: 0;
 }
 
 .div {
@@ -292,7 +540,7 @@ onBeforeUnmount(() => {
 }
 
 .start-free-listing {
-  padding: 12px 24px;
+  padding: 9px 19px;
   background: linear-gradient(90deg, #2876C1 0%, #0E5293 100%);
   color: #fff;
   font-size: 14px;
@@ -302,7 +550,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
   white-space: nowrap;
   transition: opacity 0.2s;
-  margin-left: 18px;
 }
 
 .start-free-listing:hover {
@@ -354,6 +601,18 @@ onBeforeUnmount(() => {
   overflow-y: auto;
 }
 
+@media (max-width: 480px) {
+  .mobile-menu {
+    top: 60px;
+  }
+}
+
+@media (max-width: 428px) {
+  .mobile-menu {
+    top: 56px;
+  }
+}
+
 .mobile-menu-open {
   transform: translateX(0);
 }
@@ -384,10 +643,58 @@ onBeforeUnmount(() => {
   justify-content: space-between;
 }
 
+.mobile-menu-item.dropdown-item {
+  padding: 12px 0;
+  font-size: 16px;
+}
+
+.mobile-menu-item.dropdown-item span {
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+}
+
 .dropdown-icon {
   width: 11px;
   height: 5px;
   object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+/* Mobile Dropdown Container */
+.mobile-dropdown-container {
+  width: 100%;
+}
+
+.mobile-dropdown-container .mobile-menu-item {
+  padding: 12px 0 !important;
+  font-size: 16px !important;
+}
+
+.mobile-dropdown-menu {
+  background-color: #f9f9f9;
+  padding: 8px 0;
+  margin-top: 4px;
+  animation: slideDown 0.3s ease;
+}
+
+.mobile-dropdown-item {
+  display: block;
+  padding: 10px 32px;
+  font-size: 15px;
+  color: #000;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mobile-dropdown-item:hover {
+  background-color: #f0f0f0;
+  color: #0B5AA5;
+}
+
+.mobile-dropdown-item:last-child {
+  border-bottom: none;
 }
 
 .mobile-menu-contact {
@@ -475,10 +782,16 @@ onBeforeUnmount(() => {
     align-items: center;
     gap: 24px;
     font-size: 14px;
+    position: relative;
   }
 
   .desktop-actions {
     display: flex;
+  }
+
+  /* Ensure dropdowns appear above other content */
+  .dropdown-menu {
+    z-index: 1002;
   }
 
   .mobile-menu {
@@ -492,6 +805,50 @@ onBeforeUnmount(() => {
   .header-logo {
     max-width: 117.6px;
     height: 34.3px;
+  }
+
+  .phone-full {
+    display: flex;
+  }
+
+  .phone-compact {
+    display: none;
+  }
+}
+
+/* Medium Desktop - Show compact phone with icon */
+@media (min-width: 1024px) and (max-width: 1300px) {
+  .phone-full {
+    display: none;
+  }
+
+  .phone-compact {
+    display: flex;
+  }
+
+  .group2 {
+    gap: 16px;
+    font-size: 13px;
+  }
+
+  .am-to-6pm-cst-mon-sat {
+    margin-left: 4px;
+  }
+
+  /* Adjust dropdown positioning for medium screens */
+  .dropdown-menu {
+    min-width: 180px;
+  }
+}
+
+/* Large Desktop - Show full phone info */
+@media (min-width: 1301px) {
+  .phone-full {
+    display: flex;
+  }
+
+  .phone-compact {
+    display: none;
   }
 }
 

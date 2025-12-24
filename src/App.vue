@@ -112,6 +112,13 @@ const toggleFavorite = (propertyId) => {
 const propertyCount = computed(() => {
   return new Intl.NumberFormat('en-US').format(properties.value.length)
 })
+
+const handleFilterChange = (filters) => {
+  // Filter properties based on selected filters
+  // This can be expanded to actually filter the properties list
+  console.log('Filter changed:', filters)
+  // You can implement actual filtering logic here
+}
 </script>
 
 <template>
@@ -120,7 +127,7 @@ const propertyCount = computed(() => {
     <Header />
 
     <!-- Filter Bar -->
-    <FilterBar />
+    <FilterBar @filter-change="handleFilterChange" />
 
     <!-- Main Content -->
     <main class="main-content">
