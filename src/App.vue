@@ -24,7 +24,7 @@ const properties = ref([
     daysOnMarket: 6,
     isFavorite: false,
     images: [image1, image2, image3, image4],
-    coordinates: [30.2672, -97.7431],
+    coordinates: [40.7128, -74.0060], // New York, NY
   },
   {
     id: 2,
@@ -38,7 +38,7 @@ const properties = ref([
     daysOnMarket: 12,
     isFavorite: false,
     images: [image2, image3, image4, image1],
-    coordinates: [32.7767, -96.7970],
+    coordinates: [34.0522, -118.2437], // Los Angeles, CA
   },
   {
     id: 3,
@@ -52,7 +52,7 @@ const properties = ref([
     daysOnMarket: 3,
     isFavorite: false,
     images: [image3, image4, image1, image2],
-    coordinates: [29.7604, -95.3698],
+    coordinates: [41.8781, -87.6298], // Chicago, IL
   },
   {
     id: 4,
@@ -66,7 +66,7 @@ const properties = ref([
     daysOnMarket: 10,
     isFavorite: false,
     images: [image4, image1, image2, image3],
-    coordinates: [29.4241, -98.4936],
+    coordinates: [29.7604, -95.3698], // Houston, TX
   },
   {
     id: 5,
@@ -80,7 +80,7 @@ const properties = ref([
     daysOnMarket: 4,
     isFavorite: false,
     images: [image1, image3, image2, image4],
-    coordinates: [32.7555, -97.3308],
+    coordinates: [33.4484, -112.0740], // Phoenix, AZ
   },
   {
     id: 6,
@@ -94,7 +94,7 @@ const properties = ref([
     daysOnMarket: 8,
     isFavorite: false,
     images: [image2, image4, image1, image3],
-    coordinates: [31.7619, -106.4850],
+    coordinates: [30.2672, -97.7431], // Austin, TX
   },
 ])
 
